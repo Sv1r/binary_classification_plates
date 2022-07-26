@@ -62,6 +62,7 @@ def show_image_classification(dataloader):
 
 
 def train_model(model, model_name, train_dataloader, valid_dataloader, loss, optimizer, num_epochs, scheduler=None):
+    """Model training function"""
     print(f'Model {model_name} training')
     train_loss_history, valid_loss_history = [], []
     train_accuracy_history, valid_accuracy_history = [], []
@@ -109,3 +110,24 @@ def train_model(model, model_name, train_dataloader, valid_dataloader, loss, opt
             print('{} Loss: {:.4f} Acc: {:.4f}'.format(phase, epoch_loss, epoch_acc), flush=True)
 
     return model, train_loss_history, valid_loss_history, train_accuracy_history, valid_accuracy_history
+
+
+def result_plot(data, models_name):
+    """Plot results of models training"""
+    fig, ax = plt.subplots(1, 2, figsize=(20, 8))
+    legend_names = ['Train', 'Valid']
+    for model in models_name:
+        for stage in legend_names:
+            loss = data[f'{model}_{stage}_loss'].tolist()
+            accuracy = data[f'{model}_{stage}_accuracy'].tolist()
+            ax[0].plot(loss, label=f'{model} {stage}')
+            ax[1].plot(accuracy, label=f'{model} {stage}')
+
+    for i, j in enumerate(['Loss', 'Accuracy']):
+        ax[i].set_title(f'{j} Plot', fontsize=14)
+        ax[i].set_xlabel('Epoch', fontsize=12)
+        ax[i].set_ylabel(f'{j} Value', fontsize=12)
+        ax[i].legend()
+
+    fig.suptitle('Result of Model Training', fontsize=18)
+    plt.show()
