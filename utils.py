@@ -68,7 +68,8 @@ def train_model(model, model_name, train_dataloader, valid_dataloader, loss, opt
     train_accuracy_history, valid_accuracy_history = [], []
     model = model.to(device)
     for epoch in range(num_epochs):
-        print('Epoch {}/{}:'.format(epoch, num_epochs - 1), flush=True)
+        if epoch % 10 == 0 or epoch == num_epochs:
+            print('Epoch {}/{}:'.format(epoch, num_epochs), flush=True)
         # Each epoch has a training and validation phase
         for phase in ['Train', 'Valid']:
             if phase == 'Train':
@@ -80,7 +81,7 @@ def train_model(model, model_name, train_dataloader, valid_dataloader, loss, opt
             running_loss = 0.
             running_acc = 0.
             # Iterate over data.
-            for inputs, labels in tqdm.tqdm(dataloader):
+            for inputs, labels in dataloader:
                 inputs = inputs.to(device)
                 labels = labels.to(device)
                 optimizer.zero_grad()
@@ -107,14 +108,15 @@ def train_model(model, model_name, train_dataloader, valid_dataloader, loss, opt
             else:
                 valid_loss_history.append(epoch_loss)
                 valid_accuracy_history.append(epoch_acc)
-            print('{} Loss: {:.4f} Acc: {:.4f}'.format(phase, epoch_loss, epoch_acc), flush=True)
+            if epoch % 10 == 0 or epoch == num_epochs:
+                print('{} Loss: {:.4f} Acc: {:.4f}'.format(phase, epoch_loss, epoch_acc), flush=True)
 
     return model, train_loss_history, valid_loss_history, train_accuracy_history, valid_accuracy_history
 
 
 def result_plot(data, models_name):
     """Plot results of models training"""
-    fig, ax = plt.subplots(1, 2, figsize=(20, 8))
+    fig, ax = plt.subplots(1, 2, figsize=(10, 5))
     legend_names = ['Train', 'Valid']
     for model in models_name:
         for stage in legend_names:

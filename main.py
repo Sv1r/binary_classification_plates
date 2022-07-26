@@ -21,13 +21,12 @@ def main():
     loss = torch.nn.CrossEntropyLoss()
     for i, model_name in enumerate(models.models_dict.keys()):
         model = models.models_dict[model_name]
-        # For Vit model we have to use specific optimization algorithm
         if i == 0:
             optimizer = torch.optim.SGD(model.parameters(), lr=1e-2, momentum=.9)
             scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=7, gamma=.1)
         if i == 1:
-            optimizer = torch.optim.RMSprop(model.parameters(), lr=.064, momentum=.00001)
-            scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=2, gamma=.973)
+            optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
+            scheduler = None
         else:
             optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4)
             scheduler = None
