@@ -32,14 +32,16 @@ def main():
             optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4)
             scheduler = None
 
-        model, train_loss, valid_loss, train_accuracy, valid_accuracy = utils.train_model(model=model,
-                                                                                          model_name=model_name,
-                                                                                          train_dataloader=dataset.train_dataloader,
-                                                                                          valid_dataloader=dataset.valid_dataloader,
-                                                                                          loss=loss,
-                                                                                          optimizer=optimizer,
-                                                                                          num_epochs=settings.EPOCHS,
-                                                                                          scheduler=scheduler)
+        model, train_loss, valid_loss, train_accuracy, valid_accuracy = utils.train_model(
+            model=model,
+            model_name=model_name,
+            train_dataloader=dataset.train_dataloader,
+            valid_dataloader=dataset.valid_dataloader,
+            loss=loss,
+            optimizer=optimizer,
+            num_epochs=settings.EPOCHS,
+            scheduler=scheduler
+        )
         # Add results for each model
         df[f'{model_name}_Train_loss'] = train_loss
         df[f'{model_name}_Valid_loss'] = valid_loss
